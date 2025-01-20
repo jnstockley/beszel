@@ -14,6 +14,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
+        go-version: 'stable'
         check-latest: true
 
     - name: Build binary
@@ -32,21 +33,14 @@ jobs:
 
     - name: Create release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v2.2.1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
+        token: '${{ github.token }}'
+        files: 'beszel/beszel/cmd/agent/agent.exe'
         tag_name: ${{ env.latest_release }}
-        release_name: Release ${{ env.latest_release }}
-        draft: false
         prerelease: false
-
-    - name: Upload release asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: beszel/beszel/cmd/agent/agent.exe
-        asset_name: agent.exe
-        asset_content_type: application/octet-stream
+        name: Release ${{ env.latest_release }}
+        draft: false
+        make_latest: true
