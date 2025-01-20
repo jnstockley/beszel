@@ -2,9 +2,6 @@ name: Build and Release Windows Binary
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
 
 jobs:
   build:
